@@ -1,0 +1,5 @@
+[vault]
+url = {{ vault_addr }}
+approle = {{ role_id.data['data']['role_id'] }}
+secret_id = {{  secret_id.data['data']['secret_id'] }}
+backend = {{ policy_name }}

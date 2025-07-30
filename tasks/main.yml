@@ -1,0 +1,7 @@
+---
+# tasks file for vaultlocker
+# - include_tasks: docker-instll.yaml
+- include_tasks: install.yaml 
+
+# - include_tasks: configure.yaml
+
