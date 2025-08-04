@@ -1,37 +1,37 @@
 ---
 
-# - name: Install dependencies (curl, gnupg, etc.)
-#   apt:
-#     name: "{{ item }}"
-#     state: present
-#     update_cache: yes
-#   loop:
-#     - curl
-#     - gnupg
-#     - software-properties-common
-#     - vaultlocker
-#     - wget 
-#     - net-tools 
-#     - apt-transport-https
-#     - cryptsetup
+- name: Install dependencies (curl, gnupg, etc.)
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - curl
+    - gnupg
+    - software-properties-common
+    - vaultlocker
+    - wget 
+    - net-tools 
+    - apt-transport-https
+    - cryptsetup
 
-# - name: Install vault via snap
-#   community.general.snap:
-#     name:
-#       - vault
+- name: Install vault via snap
+  community.general.snap:
+    name:
+      - vault
 
-# - name: Install pip3 (Debian/Ubuntu)
-#   ansible.builtin.apt:
-#     name: python3-pip
-#     state: present
-#     update_cache: yes     
+- name: Install pip3 (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: python3-pip
+    state: present
+    update_cache: yes     
 
-# - name: Install hvac library via pip3
-#   ansible.builtin.pip:
-#     name: hvac
-#     executable: pip3
-#     version: "0.11.2"
-#     state: present
+- name: Install hvac library via pip3
+  ansible.builtin.pip:
+    name: hvac
+    executable: pip3
+    version: "0.11.2"
+    state: present
 
 - name: Deploy configuration from template
   ansible.builtin.template:
@@ -91,7 +91,7 @@
   register: secret_id
 
 # - debug:
-#     msg: "{{ lookup('hashi_vault', 'secret=auth/approle/role/vaultlocker/secret-id token={{ vault_token }} url={{ vault_addr }}')}}"
+#     msg: "{{ lookup('hashi_vault', 'secret=auth/approle/role/{{ policy_name }}/secret-id token={{ vault_token }} url={{ vault_addr }}')}}"
 
 - name: Display all registered secret_id
   debug:
@@ -187,6 +187,30 @@
 
 - debug:
     msg: "{{ data6 }}"
+
+- name: Deploy configuration from template
+  ansible.builtin.template:
+    src: decript-locker-unit.j2
+    dest: /usr/lib/systemd/system/vaultlocker-decrypt@.service
+    owner: root
+    group: root
+    mode: '644'
+
+
+# - name: Add a new mount entry to /etc/fstab
+#   lineinfile:
+#     path: /etc/fstab
+#     line: '/dev/mapper/crypt-{{ data2.stdout_lines[-1]  }} /mnt/data ext4 defaults 0 0'
+#     state: present
+
+# - name: Modify an existing mount option in /etc/fstab
+#   lineinfile:
+#     path: /etc/fstab
+#     regexp: '^(/dev/sda1\s+/mnt/olddata\s+ext4\s+)([^#\s]+)(.*)$'
+#     line: '\1noatime,nodiratime,\2\3'
+#     backrefs: yes
+#     state: present
+
 
 ##### mnt disck command way 
 
