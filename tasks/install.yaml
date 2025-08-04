@@ -188,6 +188,30 @@
 - debug:
     msg: "{{ data6 }}"
 
+- name: Deploy configuration from template
+  ansible.builtin.template:
+    src: decript-locker-unit.j2
+    dest: /usr/lib/systemd/system/vaultlocker-decrypt@.service
+    owner: root
+    group: root
+    mode: '644'
+
+
+# - name: Add a new mount entry to /etc/fstab
+#   lineinfile:
+#     path: /etc/fstab
+#     line: '/dev/mapper/crypt-{{ data2.stdout_lines[-1]  }} /mnt/data ext4 defaults 0 0'
+#     state: present
+
+# - name: Modify an existing mount option in /etc/fstab
+#   lineinfile:
+#     path: /etc/fstab
+#     regexp: '^(/dev/sda1\s+/mnt/olddata\s+ext4\s+)([^#\s]+)(.*)$'
+#     line: '\1noatime,nodiratime,\2\3'
+#     backrefs: yes
+#     state: present
+
+
 ##### mnt disck command way 
 
 

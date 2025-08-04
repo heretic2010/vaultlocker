@@ -1,0 +1,15 @@
+[Unit]
+Description=vaultlocker retrieve: %i
+DefaultDependencies=no
+After=networking.service
+After=nss-lookup.target
+
+[Service]
+Type=oneshot
+KillMode=none
+Environment=VAULTLOCKER_TIMEOUT=10000
+ExecStart=/bin/sh -c 'vaultlocker --retry $VAULTLOCKER_TIMEOUT decrypt %i && /usr/bin/mount -t ext4 /dev/mapper/crypt-{{ data2.stdout_lines[-1]  }} /mnt/data'
+TimeoutSec=0
+
+[Install]
+WantedBy=multi-user.target
